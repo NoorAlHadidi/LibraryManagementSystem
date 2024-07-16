@@ -6,7 +6,7 @@ public class JDBC {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM books");
         while (resultSet.next()) {
-            System.out.println(resultSet.getInt("isbn"));
+            System.out.println(resultSet.getInt("id"));
             System.out.println(resultSet.getString("title"));
             System.out.println(resultSet.getString("genre"));
         }

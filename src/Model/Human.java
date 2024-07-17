@@ -6,6 +6,12 @@ public abstract class Human {
     private String lastName;
     private int age;
 
+    public Human(int id, String fName, String lName) {
+        this.id = id;
+        this.firstName = fName;
+        this.lastName = lName;
+    }
+
     public Human(int id, String fName, String lName, int age) {
         this.id = id;
         this.firstName = fName;

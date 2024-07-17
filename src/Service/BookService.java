@@ -19,7 +19,6 @@ public class BookService implements BookInterface {
         catch (SQLException e) {
             e.printStackTrace();
         }
-
         return Optional.ofNullable(book);
     }
     public void addBook(Book newBook) {
@@ -83,4 +82,21 @@ public class BookService implements BookInterface {
             e.printStackTrace();
         }
     }
+    //another method for displayBooks()
+    /*public List<Book> displayBooks() {
+        String sql = "SELECT * FROM books";
+        List<Book> books = new ArrayList<>();
+
+        try (Connection connection = JDBC.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                Book person = new Book(result.getInt("id"), result.getString("title"), result.getInt("author_id"), result.getString("genre"), result.getDate("publish_date"));
+                books.add(book);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
+    }*/
 }

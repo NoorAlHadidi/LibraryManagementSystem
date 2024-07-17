@@ -22,6 +22,9 @@ FOREIGN KEY(author_id) REFERENCES authors(id)
     ON UPDATE CASCADE
 );
 
+ALTER TABLE books
+ADD CONSTRAINT UNIQUE (title);
+
 CREATE TABLE customers(
 first_name VARCHAR(100) NOT NULL,
 last_name VARCHAR(100) NOT NULL,

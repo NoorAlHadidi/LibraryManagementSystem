@@ -3,7 +3,6 @@ import Service.*;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -37,6 +36,32 @@ public class Main {
                 break;
             }
             System.out.println("Book is already added, enter another title:");
+        }
+        //removing a book
+        System.out.println("Enter the title of the book you'd like to remove:");
+        String bookRemove;
+        while(true) {
+            bookRemove = scanner.nextLine();
+            if(bookServ.findBook(bookRemove).isPresent()) {
+                bookServ.removeBook((bookServ.findBook(bookRemove)).get());
+                break;
+            }
+            System.out.println("Book does not exist, enter another title:");
+        }
+        //displaying all books
+        System.out.println("Displaying all books");
+        bookServ.displayBooks();
+        //retrieving books by a certain author
+        System.out.println("Enter the first and last name of the desired author:");
+        String retAuthor;
+        while(true) {
+            retAuthor = scanner.nextLine();
+            String[] retAuthorDetails = retAuthor.split(" ");
+            if(authorServ.findAuthor(retAuthorDetails[0], retAuthorDetails[1]).isPresent()) {
+                bookServ.retrieveBook((authorServ.findAuthor(retAuthorDetails[0], retAuthorDetails[1])).get());
+                break;
+            }
+            System.out.println("Author does not exist, enter correct author name:");
         }
     }
 }

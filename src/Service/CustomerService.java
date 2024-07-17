@@ -51,26 +51,24 @@ public class CustomerService implements CustomerInterface {
         }
     }
     public int findTransaction(Customer customer, Book book) {
-        int retVal = 0;
-        String sql = "SELECT borrow_date, return_date FROM borrowbook WHERE book_id = ? AND customer_id = ?";
-        try (Connection connection = JDBC.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, book.getID());
-            statement.setInt(2, customer.getID());
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    Date returnDate = result.getDate("return_date");
-                    Date borrowDate = result.getDate("borrow_date");
-                    if (!result.wasNull()) {
-                        System.out.println("Book has already been borrowed and returned.");
-                        retVal = 1;
-                    } else if (!result.wasNull()) {
-                        System.out.println("Book has already been borrowed.");
-                        retVal = 2;
-                    }
-                }
-                else {
-                    retVal = 3;
-                }
+        int retVal;
+        String sql1 = "SELECT borrow_date, return_date FROM borrowbook WHERE book_id = ? AND customer_id = ? AND borrow_date IS NOT NULL AND return_date IS NOT NULL";
+        String sql2 = "SELECT borrow_date, return_date FROM borrowbook WHERE book_id = ? AND customer_id = ? AND borrow_date IS NOT NULL AND return_date IS NULL";
+        try (Connection connection = JDBC.getConnection(); PreparedStatement statement1 = connection.prepareStatement(sql1); PreparedStatement statement2 = connection.prepareStatement(sql2)) {
+            statement1.setInt(1, book.getID());
+            statement1.setInt(2, customer.getID());
+            statement2.setInt(1, book.getID());
+            statement2.setInt(2, customer.getID());
+            ResultSet result1 = statement1.executeQuery();
+            ResultSet result2 = statement2.executeQuery();
+            if(result1.next()) {
+                retVal = 1; //book has been borrowed and returned
+            }
+            else if(result2.next()) {
+                retVal = 2; //book has been borrowed but not returned
+            }
+            else {
+                retVal = 3; //no transaction between the book and customer yet
             }
         }
         catch (SQLException e) {

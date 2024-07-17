@@ -80,6 +80,12 @@ public class Main {
                 if(customerServ.findTransaction(tempCust, tempBook) == 3) {
                     customerServ.borrowBook(tempCust, tempBook, Date.valueOf("2022-09-10"));
                 }
+                else if(customerServ.findTransaction(tempCust, tempBook) == 1) {
+                    System.out.println("Book has already been borrowed and returned.");
+                }
+                else if(customerServ.findTransaction(tempCust, tempBook) == 2) {
+                    System.out.println("Book has already been borrowed.");
+                }
                 break;
             }
             System.out.println("Book does not exist, enter another title:");
@@ -105,6 +111,12 @@ public class Main {
                 Customer tempCust = customerServ.findCustomer(returnCustDetails[0], returnCustDetails[1]).get();
                 if(customerServ.findTransaction(tempCust, tempBook) == 2) {
                     customerServ.returnBook(tempCust, tempBook, Date.valueOf("2024-02-16"));
+                }
+                else if(customerServ.findTransaction(tempCust, tempBook) == 1) {
+                    System.out.println("Book has already been returned.");
+                }
+                else if(customerServ.findTransaction(tempCust, tempBook) == 3) {
+                    System.out.println("Book was never initially borrowed by this user.");
                 }
                 break;
             }

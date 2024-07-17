@@ -50,28 +50,32 @@ public class CustomerService implements CustomerInterface {
             e.printStackTrace();
         }
     }
-    public boolean findTransaction(Customer customer, Book book) {
-        boolean retVal = false;
+    public int findTransaction(Customer customer, Book book) {
+        int retVal = 0;
         String sql = "SELECT borrow_date, return_date FROM borrowbook WHERE book_id = ? AND customer_id = ?";
         try (Connection connection = JDBC.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, book.getID());
             statement.setInt(2, customer.getID());
-            ResultSet result = statement.executeQuery();
-            if (result.getDate("return_date") != null) {
-                System.out.println("Book has already been borrowed and returned.");
-                return retVal;
-            }
-            else if(result.getDate("borrow_date") != null) {
-                System.out.println("Book has already been borrowed.");
-                return retVal;
-            }
-            else {
-                retVal = true;
-                return retVal;
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    Date returnDate = result.getDate("return_date");
+                    Date borrowDate = result.getDate("borrow_date");
+                    if (!result.wasNull()) {
+                        System.out.println("Book has already been borrowed and returned.");
+                        retVal = 1;
+                    } else if (!result.wasNull()) {
+                        System.out.println("Book has already been borrowed.");
+                        retVal = 2;
+                    }
+                }
+                else {
+                    retVal = 3;
+                }
             }
         }
-        catch(SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
+            retVal = -1;
         }
         return retVal;
     }
